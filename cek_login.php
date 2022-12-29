@@ -14,12 +14,18 @@ if ($user_valid > 0) {
     $data = mysqli_fetch_assoc($cek_user);
     if ($data['level'] == "administrator") {
         //tampung di session
-        $_SESSION['username'] = $username;
+        $_SESSION['username'] = $user;
         $_SESSION['level'] = "administrator";
+        $_SESSION['id_user'] = $data['id_user'];
+        $_SESSION['nama'] = $data['nama'];
+        $_SESSION['foto'] = $data['foto'];
         header('location:administrator/index.php');
     } elseif ($data['level'] == "user") {
-        $_SESSION['username'] = $username;
+        $_SESSION['username'] = $user;
         $_SESSION['level'] = "user";
+        $_SESSION['id_user'] = $data['id_user'];
+        $_SESSION['nama'] = $data['nama'];
+        $_SESSION['foto'] = $data['foto'];
         header('location:user/index.php');
     } else {
         echo "<script>alert('Maaf, Login gagal');document.location='index.php'</script>";

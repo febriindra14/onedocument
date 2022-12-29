@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
-    <title>one document - Login</title>
+    <link rel="icon" href="img/unuyo.png" type="">
+    <title>One document - Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -50,7 +50,7 @@
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <img src="img/logo_unu.png" class="logo-login">
+                                        <img src="img/unuyo.png" class="logo-login">
                                         <!--<h1 class="h5 text-gray-900 mb-3">Login</h1> -->
                                         <h1 class="h4 text-gray-900 mb-3">Aplikasi One Document</h1>
                                     </div>
@@ -73,15 +73,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <!--<div class="form-group">
-                                            <select class="custom-select form-control" name="level" required>
-                                                <option value="">pilih masuk</option>
-                                                <option value="administrator">administrator</option>]
-                                                <option value="user">user</option>
-                                            </select>
-                                        </div> -->
-
                                         <!--<div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck">
@@ -92,10 +83,6 @@
                                         <button class="btn btn-primary btn-user btn-block" type="submit">
                                             Login
                                         </button>
-                                        <hr>
-                                        <a href="#" class="btn btn-google btn-user btn-block">
-                                            <i class="fab fa-google fa-fw"></i> Login with Google
-                                        </a>
 
                                     </form>
 
@@ -104,7 +91,9 @@
                                     </div> -->
                                     <hr>
                                     <div class="text-center">
-                                        Belum punya akun? <a class="small" href="register.php">Buat akun</a>
+                                        Belum punya akun? <a class="small text-primary" href="register.php">
+                                            Buat akun!
+                                        </a>
                                     </div>
                                 </div>
                             </div>

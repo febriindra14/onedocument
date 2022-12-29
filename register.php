@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
-    <title>one document - Register</title>
+    <link rel="icon" href="img/unuyo.png" type="">
+    <title>One document - Register</title>
 
     <!-- Custom fonts for this template-->
     <link href="template/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -49,44 +49,40 @@
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <img src="img/logo_unu.png" class="logo-login">
+                                        <img src="img/unuyo.png" class="logo-login">
                                         <h1 class="h5 text-gray-900 mb-3">Silahkan registrasi</h1>
                                         <h1 class="h4 text-gray-900 mb-3">Aplikasi One Document</h1>
                                     </div>
 
-                                    <form action="add_user.php" method="post">
+                                    <form action="add_user.php" method="post" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <input type="text" name="username" class="form-control form-control-user" placeholder="Masukkan username" required>
                                         </div>
                                         <div class="form-group">
                                             <input type="email" name="email" class="form-control form-control-user" placeholder="Masukkan email" required>
                                         </div>
-                                        <div class="form-group row">
-
-                                            <div class="col-sm-7">
-                                                <div class="input-group" id="show_hide_password">
-                                                    <input type="password" name="password" class="form-control" placeholder="Password" required>
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">
-                                                            <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
-                                                        </span>
-                                                    </div>
+                                        <div class="form-group">
+                                            <div class="input-group" id="show_hide_password">
+                                                <input type="password" name="password" class="form-control" placeholder="Masukkan Password" required>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <!--<div class="col-sm-6">
-                                                <input type="password" class="form-control form-control-user" id="exampleRepeatPassword" placeholder="Repeat Password">
-                                            </div> -->
-                                            <div class="col-sm-5 mb-3 mb-sm-0">
-                                                <select name="level" class="custom-select form-control" required>
-                                                    <option value="">Pilih Level</option>
-                                                    <option value="user">User</option>
-                                                    <option value="administrator">Admin</option>
-                                                </select>
-                                            </div>
-                                            <!--<div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="text" name="level" class="form-control form-control-user" placeholder="user" readonly>
-                                            </div> -->
                                         </div>
+                                        <div class="form-group">
+                                            <div class="input-group" id="show_hide_password">
+                                                <input type="password" name="repassword" class="form-control" placeholder="Ulangi Password" required>
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <a href=""><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <input type="hidden" name="level" id="" value="user">
 
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user" placeholder="Masukkan nama" name="nama" required>
@@ -97,9 +93,17 @@
                                         <div class="form-group">
                                             <select name="prodi" class="custom-select form-control" required>
                                                 <option value="">Pilih prodi</option>
-                                                <option value="informatika">informatika</option>
-                                                <option value="teknik komputer">T komputer</option>
-                                                <option value="teknik elektro">T elektro</option>
+                                                <option value="informatika">Informatika</option>
+                                                <option value="teknik komputer">Teknik komputer</option>
+                                                <option value="teknik elektro">Teknik elektro</option>
+                                                <option value="akuntansi">Akuntansi</option>
+                                                <option value="manajemen">Manajemen</option>
+                                                <option value="pendidikan bahasa inggris">Pbi</option>
+                                                <option value="pendidikan guru sekolah dasar">Pgsd</option>
+                                                <option value="agribisnis">Agribisnis</option>
+                                                <option value="teknologi hasil pertanian">Thp</option>
+                                                <option value="farmasi">Farmasi</option>
+                                                <option value="studi islam interdisipliner">Sii</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -121,8 +125,7 @@
 
                                         <div class="mb-3">
                                             <label for="file" class="font-weight-bold text-primary">Foto</label>
-                                            <input type="file" class="form-control-file" id="file" name="foto" required>
-                                            <!--accept=".jpg"> -->
+                                            <input type="file" class="form-control-file" id="file" name="foto" accept=".jpg , .png , .jpeg">
                                         </div>
                                         <div class="mb-3">
                                             <img class="img-thumbnail" id="myImg">
@@ -134,11 +137,9 @@
 
                                     </form>
                                     <hr>
-                                    <!--<div class="text-center">
-                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
-                                    </div> -->
+
                                     <div class="text-center">
-                                        Sudah punya akun? <a class="small" href="index.php">Login!</a>
+                                        Sudah punya akun? <a class="small text-primary" href="index.php">Login!</a>
                                     </div>
                                 </div>
                             </div>
