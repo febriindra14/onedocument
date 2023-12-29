@@ -50,11 +50,11 @@
                                 <div class="p-5">
                                     <div class="text-center">
                                         <img src="img/unuyo.png" class="logo-login">
-                                        <h1 class="h5 text-gray-900 mb-3">Silahkan registrasi</h1>
+                                        <h1 class="h5 text-gray-900 mb-3">Silahkan Registrasi</h1>
                                         <h1 class="h4 text-gray-900 mb-3">Aplikasi One Document</h1>
                                     </div>
 
-                                    <form action="add_user.php" method="post" enctype="multipart/form-data">
+                                    <form action="cek_login.php" method="post" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <input type="text" name="username" class="form-control form-control-user" placeholder="Masukkan username" required>
                                         </div>
@@ -131,7 +131,7 @@
                                             <img class="img-thumbnail" id="myImg">
                                         </div>
 
-                                        <button class="btn btn-primary btn-user btn-block" type="submit">
+                                        <button class="btn btn-primary btn-user btn-block" type="submit" name="userad">
                                             Daftar akun
                                         </button>
 

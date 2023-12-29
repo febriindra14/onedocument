@@ -1,6 +1,6 @@
 <?php
 session_start();
-//jika belum login tapi akses harus login
+
 if ($_SESSION['level'] == "") {
     header('location:../index.php');
 }
@@ -11,7 +11,6 @@ $page = "user";
 <?php
 include '../config.php';
 
-//update user
 if (isset($_POST['update'])) {
     $iduser = $_POST['id_user'];
     $username = $_POST['username'];
@@ -25,13 +24,11 @@ if (isset($_POST['update'])) {
     $jafung = $_POST['jafung'];
     $wa = $_POST['no_wa'];
     $tgl_lahir = $_POST['tgl_lahir'];
-    //$foto = $_POST['foto'];
+
     $gambar = $_FILES['foto']['name'];
     if (empty($gambar)) {
         $koneksi->query("UPDATE user SET username='$username', email='$email', password=md5('$password'), repassword='$repass', level='$level', nama='$nama', nidn='$nidn', prodi='$prodi', jafung='$jafung', no_wa='$wa', tgl_lahir='$tgl_lahir' where id_user=$iduser ");
-        echo " <div class='alert alert-success'>
-                    <strong>Success!</strong>
-                </div><meta http-equiv='refresh' content='1; url= profil.php'/>  ";
+        header('location: profil.php?pesan=succes');
     } else {
         $hapus = $koneksi->query("SELECT * FROM user WHERE id_user=$iduser");
         $nama_gambar = mysqli_fetch_array($hapus);
@@ -42,13 +39,10 @@ if (isset($_POST['update'])) {
         //add folder lagi
         move_uploaded_file($_FILES['foto']['tmp_name'], "../img/" . $gambar);
         $koneksi->query("UPDATE user SET username='$username', email='$email', password=md5('$password'), repassword='$repass', level='$level', nama='$nama', nidn='$nidn', prodi='$prodi', jafung='$jafung', no_wa='$wa', tgl_lahir='$tgl_lahir', foto='$gambar' where id_user=$iduser ");
-        echo " <div class='alert alert-success'>
-                <strong>Success!</strong>
-                </div><meta http-equiv='refresh' content='1; url= profil.php'/>  ";
+        header('location: profil.php?pesan=succes');
     }
 };
 
-//delete
 if (isset($_POST['hapus'])) {
     $id_user = $_POST['id_user'];
 
@@ -61,17 +55,12 @@ if (isset($_POST['hapus'])) {
     $delete = mysqli_query($koneksi, "DELETE FROM user where id_user='$id_user'");
     //cek apakah berhasil
     if ($delete) {
-        echo " <div class='alert alert-success'>
-            <strong>Success!</strong>
-          </div>
-        <meta http-equiv='refresh' content='1; url= profil.php'/>  ";
+        header('location: profil.php?pesan=succesd');
     } else {
-        echo "<div class='alert alert-warning'>
-            <strong>Failed!</strong>
-          </div>
-         <meta http-equiv='refresh' content='1; url= profil.php'/> ";
+        header('location: profil.php?pesan=failedd');
     }
 };
+
 if (isset($_POST['simpan'])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
@@ -84,27 +73,20 @@ if (isset($_POST['simpan'])) {
     $jafung = $_POST['jafung'];
     $wa = $_POST['no_wa'];
     $tgl_lahir = $_POST['tgl_lahir'];
-    //$foto = $_POST['foto'];
+
     if (isset($_FILES['foto']['name'])) {
         $file_name = $_FILES['foto']['name'];
-        $file_tmp = $_FILES['foto']['tmp_name'];
-        move_uploaded_file($file_tmp, "../img/" . $file_name);
-        $query = mysqli_query($koneksi, "INSERT INTO user VALUES(NULL,'$username','$email',md5('$password'),'$repass','$level','$nama','$nidn','$prodi','$jafung','$wa','$tgl_lahir','$file_name')");
-        if ($query) {
-            echo " <div class='alert alert-success'>
-        <strong>Success!</strong>
-      </div>
-    <meta http-equiv='refresh' content='1; url= profil.php'/>  ";
+        if (empty($file_name)) {
+            $koneksi->query("INSERT INTO user(id_user,username,email,password,repassword,level,nama,nidn,prodi,jafung,no_wa,tgl_lahir) VALUES(NULL,'$username','$email', md5('$password'),'$repass','$level','$nama','$nidn','$prodi','$jafung','$wa','$tgl_lahir')");
+            header('location: profil.php?pesan=success');
         } else {
-            echo "<div class='alert alert-warning'>
-        <strong>Failed!</strong>
-      </div>
-     <meta http-equiv='refresh' content='1; url= profil.php'/> ";
+            $file_tmp = $_FILES['foto']['tmp_name'];
+            move_uploaded_file($file_tmp, "../img/" . $file_name);
+            $koneksi->query("INSERT INTO user(id_user,username,email,password,repassword,level,nama,nidn,prodi,jafung,no_wa,tgl_lahir,foto) VALUES(NULL,'$username','$email', md5('$password'),'$repass','$level','$nama','$nidn','$prodi','$jafung','$wa','$tgl_lahir','$file_name')");
+            header('location: profil.php?pesan=success');
         }
     } else {
-        echo "<div class='alert alert-warning'>
-        <strong>MAAF GAGAL</strong>
-      </div>";
+        header('location: profil.php?pesan=warning');
     }
 };
 
@@ -127,8 +109,7 @@ if (isset($_POST['simpan'])) {
         }
 
         /* menu actv */
-        li.active,
-        a.nav-link:hover {
+        li.active {
             background-color: #464646;
         }
     </style>
@@ -170,6 +151,35 @@ if (isset($_POST['simpan'])) {
                     <div class="row">
 
                     </div>
+
+                    <?php
+                    if (isset($_GET['pesan'])) {
+                        if ($_GET['pesan'] == "success") {
+                            echo " <div class='alert alert-success'>
+                                    <strong>Berhasil simpan data</strong>
+                                    </div>
+                                    <meta http-equiv='refresh' content='1; url= profil.php'/>  ";
+                        } elseif ($_GET['pesan'] == "succes") {
+                            echo " <div class='alert alert-success'>
+                                    <strong>Berhasil ubah data</strong>
+                                     </div><meta http-equiv='refresh' content='1; url= profil.php'/>  ";
+                        } elseif ($_GET['pesan'] == "succesd") {
+                            echo " <div class='alert alert-success'>
+                                    <strong>Berhasil hapus data</strong>
+                                    </div>
+                                     <meta http-equiv='refresh' content='1; url= profil.php'/>  ";
+                        } elseif ($_GET['pesan'] == "warning") {
+                            echo "<div class='alert alert-warning'>
+                                    <strong>Gagal simpan data</strong>
+                                    </div> <meta http-equiv='refresh' content='1; url= profil.php'/>";
+                        } else {
+                            echo "<div class='alert alert-warning'>
+                                    <strong>Gagal hapus data</strong>
+                                     </div>
+                                 <meta http-equiv='refresh' content='1; url= profil.php'/> ";
+                        }
+                    }
+                    ?>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -275,8 +285,8 @@ if (isset($_POST['simpan'])) {
                                                                     <input type="text" id="nama" name="nama" class="form-control" value="<?php echo $f['nama'] ?>">
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label for="nidn">Nomor induk dosen nasional</label>
-                                                                    <input type="text" id="nidn" name="nidn" class="form-control" value="<?php echo $f['nidn'] ?>">
+                                                                    <label for="ni">Nomor induk dosen nasional</label>
+                                                                    <input type="text" id="ni" name="nidn" class="form-control" value="<?php echo $f['nidn'] ?>">
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label>Prodi</label>

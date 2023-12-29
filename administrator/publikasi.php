@@ -1,6 +1,6 @@
 <?php
 session_start();
-//jika belum login tapi akses harus login
+
 if ($_SESSION['level'] == "") {
     header('location:../index.php');
 }
@@ -11,7 +11,6 @@ $page = "publikasi";
 <?php
 include '../config.php';
 
-//edit publikasi
 if (isset($_POST['update'])) {
     $idp = $_POST['id_publikasi'];
     $ids = $_POST['id_user'];
@@ -27,9 +26,7 @@ if (isset($_POST['update'])) {
     $file = $_FILES['dokumen']['name'];
     if (empty($file)) {
         $koneksi->query("UPDATE publikasi SET id_user='$ids', jenis='$jenis', kategori='$kat', judul='$jdl', tanggal_terbit='$tgl_terbit', jml_hal='$jml_hal', penerbit='$penerbit', isbn='$isbn', tautan='$link' WHERE id_publikasi=$idp ");
-        echo " <div class='alert alert-success'>
-                <strong>Success!</strong>
-                </div><meta http-equiv='refresh' content='1; url= publikasi.php'/>  ";
+        header('location: publikasi.php?pesan=succes');
     } else {
         $hapus = $koneksi->query("SELECT * FROM publikasi WHERE id_publikasi=$idp");
         $nama_dokumen = mysqli_fetch_array($hapus);
@@ -38,12 +35,10 @@ if (isset($_POST['update'])) {
         unlink($hapus_dokumnen);
         move_uploaded_file($_FILES['dokumen']['tmp_name'], "../dokumen/" . $file);
         $koneksi->query("UPDATE publikasi SET id_user='$ids', jenis='$jenis', kategori='$kat', judul='$jdl', tanggal_terbit='$tgl_terbit', jml_hal='$jml_hal', penerbit='$penerbit', isbn='$isbn', tautan='$link', dokumen='$file' WHERE id_publikasi=$idp ");
-        echo "<div class='alert alert-success'>
-                <strong>Success!</strong>
-                </div><meta http-equiv='refresh' content='1; url= publikasi.php'/>  ";
+        header('location: publikasi.php?pesan=succes');
     }
 };
-//delete
+
 if (isset($_POST['hapus'])) {
     $idp = $_POST['id_publikasi'];
 
@@ -56,17 +51,12 @@ if (isset($_POST['hapus'])) {
     $delete = mysqli_query($koneksi, "DELETE FROM publikasi WHERE id_publikasi='$idp'");
     //cek apakah berhasil
     if ($delete) {
-        echo " <div class='alert alert-success'>
-            <strong>Success!</strong>
-          </div>
-        <meta http-equiv='refresh' content='1; url= publikasi.php'/>  ";
+        header('location: publikasi.php?pesan=succesd');
     } else {
-        echo "<div class='alert alert-warning'>
-            <strong>Failed!</strong>
-          </div>
-         <meta http-equiv='refresh' content='1; url= publikasi.php'/> ";
+        header('location: publikasi.php?pesan=failedd');
     }
 };
+
 if (isset($_POST['simpan'])) {
     $ids = $_POST['id_user'];
     $jenis = $_POST['jenis'];
@@ -80,24 +70,17 @@ if (isset($_POST['simpan'])) {
 
     if (isset($_FILES['dokumen']['name'])) {
         $file_name = $_FILES['dokumen']['name'];
-        $file_tmp = $_FILES['dokumen']['tmp_name'];
-        move_uploaded_file($file_tmp, "../dokumen/" . $file_name);
-        $query = mysqli_query($koneksi, "INSERT INTO publikasi VALUES(NULL,'$ids','$jenis','$kat','$jdl','$tgl_terbit','$jml_hal','$penerbit','$isbn','$link','$file_name')");
-        if ($query) {
-            echo " <div class='alert alert-success'>
-            <strong>Success!</strong>
-          </div>
-        <meta http-equiv='refresh' content='1; url= publikasi.php'/>  ";
+        if (empty($file_name)) {
+            $koneksi->query("INSERT INTO publikasi(id_publikasi,id_user,jenis,kategori,judul,tanggal_terbit,jml_hal,penerbit,isbn,tautan) VALUES(NULL,'$ids','$jenis','$kat','$jdl','$tgl_terbit','$jml_hal','$penerbit','$isbn','$link')");
+            header('location: publikasi.php?pesan=success');
         } else {
-            echo "<div class='alert alert-warning'>
-            <strong>Failed!</strong>
-          </div>
-         <meta http-equiv='refresh' content='1; url= publikasi.php'/> ";
+            $file_tmp = $_FILES['dokumen']['tmp_name'];
+            move_uploaded_file($file_tmp, "../dokumen/" . $file_name);
+            $koneksi->query("INSERT INTO publikasi(id_publikasi,id_user,jenis,kategori,judul,tanggal_terbit,jml_hal,penerbit,isbn,tautan,dokumen) VALUES(NULL,'$ids','$jenis','$kat','$jdl','$tgl_terbit','$jml_hal','$penerbit','$isbn','$link','$file_name')");
+            header('location: publikasi.php?pesan=success');
         }
     } else {
-        echo "<div class='alert alert-warning'>
-            <strong>MAAF GAGAL</strong>
-          </div>";
+        header('location: publikasi.php?pesan=warning');
     }
 };
 
@@ -114,8 +97,7 @@ if (isset($_POST['simpan'])) {
     <?php include('../layout/header.php'); ?>
     <style>
         /* menu actv */
-        li.active,
-        a.nav-link:hover {
+        li.active {
             background-color: #464646;
         }
     </style>
@@ -152,6 +134,35 @@ if (isset($_POST['simpan'])) {
                     <div class="row">
 
                     </div>
+
+                    <?php
+                    if (isset($_GET['pesan'])) {
+                        if ($_GET['pesan'] == "success") {
+                            echo " <div class='alert alert-success'>
+                                    <strong>Berhasil simpan data</strong>
+                                    </div>
+                                    <meta http-equiv='refresh' content='1; url= publikasi.php'/>  ";
+                        } elseif ($_GET['pesan'] == "succes") {
+                            echo " <div class='alert alert-success'>
+                                    <strong>Berhasil ubah data</strong>
+                                     </div><meta http-equiv='refresh' content='1; url= publikasi.php'/>  ";
+                        } elseif ($_GET['pesan'] == "succesd") {
+                            echo " <div class='alert alert-success'>
+                                    <strong>Berhasil hapus data</strong>
+                                    </div>
+                                     <meta http-equiv='refresh' content='1; url= publikasi.php'/>  ";
+                        } elseif ($_GET['pesan'] == "warning") {
+                            echo "<div class='alert alert-warning'>
+                                    <strong>Gagal simpan data</strong>
+                                    </div> <meta http-equiv='refresh' content='1; url= publikasi.php'/>";
+                        } else {
+                            echo "<div class='alert alert-warning'>
+                                    <strong>Gagal hapus data</strong>
+                                     </div>
+                                 <meta http-equiv='refresh' content='1; url= publikasi.php'/> ";
+                        }
+                    }
+                    ?>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">

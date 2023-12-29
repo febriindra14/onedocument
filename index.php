@@ -48,21 +48,42 @@
                         <div class="row">
                             <!--<div class="col-lg-6 d-none d-lg-block bg-login-image"></div> -->
                             <div class="col-lg-12">
+                                <?php
+                                if (isset($_GET['pesan'])) {
+                                    if ($_GET['pesan'] == "gagal") {
+                                        echo "
+                                        <div class='alert alert-danger' role='alert'>
+                                            <strong>Maaf, Login gagal</strong>
+                                            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>&times;</button>
+                                             </div>";
+                                    } elseif ($_GET['pesan'] == "failed") {
+                                        echo "
+                                        <div class='alert alert-danger' role='alert'>
+                                        <strong>Maaf, username atau password tidak ada!</strong>
+                                        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>&times;</button> 
+                                         </div>";
+                                    } elseif ($_GET['pesan'] == "succes") {
+                                        echo " <div class='alert alert-success'>
+                                                <strong>Berhasil membuat akun</strong>
+                                                </div>
+                                                <meta http-equiv='refresh' content='1; url= index.php'/>  ";
+                                    } else {
+                                        echo "<div class='alert alert-warning'>
+                                                <strong>MAAF GAGAL</strong>
+                                                </div><meta http-equiv='refresh' content='1; url= index.php'/>";
+                                    }
+                                }
+                                ?>
                                 <div class="p-5">
                                     <div class="text-center">
                                         <img src="img/unuyo.png" class="logo-login">
-                                        <!--<h1 class="h5 text-gray-900 mb-3">Login</h1> -->
+                                        <h1 class="h5 text-gray-900 mb-3">Silahkan Login</h1>
                                         <h1 class="h4 text-gray-900 mb-3">Aplikasi One Document</h1>
                                     </div>
                                     <form action="cek_login.php" method="POST">
                                         <div class="form-group">
                                             <input type="text" name="username" class="form-control" placeholder="Masukkan username" required>
                                         </div>
-
-                                        <!--<div class="form-group">
-                                            <input type="password" name="password" class="form-control" placeholder="Masukkan password" required>
-                                        </div> -->
-
                                         <div class="form-group">
                                             <div class="input-group" id="show_hide_password">
                                                 <input type="password" name="password" class="form-control" placeholder="Masukkan password" required>
@@ -73,22 +94,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--<div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div> -->
                                         <button class="btn btn-primary btn-user btn-block" type="submit">
                                             Login
                                         </button>
 
                                     </form>
-
-                                    <!--<div class="text-center">
-                                        <a class="small" href="#">Forgot Password?</a>
-                                    </div> -->
                                     <hr>
                                     <div class="text-center">
                                         Belum punya akun? <a class="small text-primary" href="register.php">

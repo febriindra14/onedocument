@@ -1,6 +1,6 @@
 <?php
 session_start();
-//jika belum login tapi akses harus login dulu
+
 if ($_SESSION['level'] == "") {
     header('location:../index.php');
 }
@@ -21,8 +21,7 @@ $page = "homeq";
     <?php include('../layout/header.php'); ?>
     <style>
         /* menu actv */
-        li.active,
-        a.nav-link:hover {
+        li.active {
             background-color: #464646;
         }
     </style>
@@ -57,7 +56,6 @@ $page = "homeq";
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Selamat datang <?= $_SESSION['nama'] ?></h1>
-                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
                     </div>
 
                     <!-- Content Row -->
@@ -65,7 +63,9 @@ $page = "homeq";
                         <?php
                         include '../config.php';
                         $a = mysqli_query($koneksi, "SELECT COUNT(id_penelitian) as jumlah FROM penelitian WHERE id_user='$_SESSION[id_user]'");
-                        $b = mysqli_fetch_array($a)
+                        $b = mysqli_fetch_array($a);
+                        $c = mysqli_query($koneksi, "SELECT SUM(dana_dikti + in_kind) as total FROM penelitian WHERE id_user='$_SESSION[id_user]'");
+                        $d = mysqli_fetch_array($c)
                         ?>
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -78,16 +78,21 @@ $page = "homeq";
                                             <div class="h3 mb-0 font-weight-bold text-gray-800"><?= $b['jumlah'] ?></div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-hands-helping fa-2x text-gray-300"></i>
+                                            <i class="fas fa-pencil-alt fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
+                                    <div class="font-weight-bold text-success text-uppercase mb-1">
+                                        Total Dana</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?= "Rp " . number_format($d['total'], 2, ",", ".") ?></div>
                                 </div>
                             </div>
                         </div>
 
                         <?php
                         $a = mysqli_query($koneksi, "SELECT COUNT(id_pengabdian) as jumlah FROM pengabdian WHERE id_user='$_SESSION[id_user]'");
-                        $b = mysqli_fetch_array($a)
+                        $b = mysqli_fetch_array($a);
+                        $c = mysqli_query($koneksi, "SELECT SUM(dana_dikti + in_kind + dana_institusi_lain + dana_pt) as total FROM pengabdian WHERE id_user='$_SESSION[id_user]'");
+                        $d = mysqli_fetch_array($c)
                         ?>
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -107,6 +112,9 @@ $page = "homeq";
                                             <i class="fas fa-people-carry fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
+                                    <div class="font-weight-bold text-info text-uppercase mb-1">
+                                        Total Dana</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800"><?= "Rp " . number_format($d['total'], 2, ",", ".") ?></div>
                                 </div>
                             </div>
                         </div>

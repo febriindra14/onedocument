@@ -1,6 +1,6 @@
 <?php
 session_start();
-//jika belum login tapi akses harus login
+
 if ($_SESSION['level'] == "") {
     header('location:../index.php');
 }
@@ -11,7 +11,6 @@ $page = "userq";
 <?php
 include '../config.php';
 
-//update user
 if (isset($_POST['update'])) {
     $iduser = $_POST['id_user'];
     $username = $_POST['username'];
@@ -29,9 +28,7 @@ if (isset($_POST['update'])) {
     $gambar = $_FILES['foto']['name'];
     if (empty($gambar)) {
         $koneksi->query("UPDATE user SET username='$username', email='$email', password=md5('$password'), repassword='$repass', level='$level', nama='$nama', nidn='$nidn', prodi='$prodi', jafung='$jafung', no_wa='$wa', tgl_lahir='$tgl_lahir' where id_user=$iduser ");
-        echo " <div class='alert alert-success'>
-                    <strong>Success!</strong>
-                </div><meta http-equiv='refresh' content='1; url= profil.php'/>  ";
+        header('location: profil.php?pesan=succes');
     } else {
         $hapus = $koneksi->query("SELECT * FROM user WHERE id_user=$iduser");
         $nama_gambar = mysqli_fetch_array($hapus);
@@ -42,9 +39,7 @@ if (isset($_POST['update'])) {
         //add folder lagi
         move_uploaded_file($_FILES['foto']['tmp_name'], "../img/" . $gambar);
         $koneksi->query("UPDATE user SET username='$username', email='$email', password=md5('$password'), repassword='$repass', level='$level', nama='$nama', nidn='$nidn', prodi='$prodi', jafung='$jafung', no_wa='$wa', tgl_lahir='$tgl_lahir', foto='$gambar' where id_user=$iduser ");
-        echo " <div class='alert alert-success'>
-                <strong>Success!</strong>
-                </div><meta http-equiv='refresh' content='1; url= profil.php'/>  ";
+        header('location: profil.php?pesan=succes');
     }
 };
 
@@ -66,8 +61,7 @@ if (isset($_POST['update'])) {
         }
 
         /* menu actv */
-        li.active,
-        a.nav-link:hover {
+        li.active {
             background-color: #464646;
         }
 
@@ -119,12 +113,32 @@ if (isset($_POST['update'])) {
 
                     </div> -->
 
-                    <div class="row">
-                        <?php
-                        $user = mysqli_query($koneksi, "SELECT * FROM user WHERE id_user='$_SESSION[id_user]' ");
-                        while ($f = mysqli_fetch_array($user)) {
-                            $id_user = $f['id_user'];
-                        ?>
+                    <?php
+                    if (isset($_GET['pesan'])) {
+                        if ($_GET['pesan'] == "succes") {
+                            echo " <div class='alert alert-success'>
+                                    <strong>Berhasil ubah data</strong>
+                                    </div>
+                                    <meta http-equiv='refresh' content='1; url= profil.php'/>  ";
+                        } else {
+                            echo "<div class='alert alert-warning'>
+                                    <strong>Gagal ubah data</strong>
+                                     </div>
+                                 <meta http-equiv='refresh' content='1; url= profil.php'/> ";
+                        }
+                    }
+                    ?>
+
+                    <?php
+                    $user = mysqli_query($koneksi, "SELECT * FROM user WHERE id_user='$_SESSION[id_user]' ");
+                    while ($f = mysqli_fetch_array($user)) {
+                        $id_user = $f['id_user'];
+                    ?>
+
+                        <td><button class="btn btn-warning" data-toggle="modal" data-target="#edit<?= $id_user; ?>"><i class="fa fa-pen"></i> Edit </button> </td> <br /><br />
+
+                        <div class="row">
+
                             <div class="col-lg-5">
 
                                 <!-- Basic Card Example -->
@@ -200,7 +214,6 @@ if (isset($_POST['update'])) {
 
                                     </td>
                                 </div>
-                                <td><button class="btn btn-warning" data-toggle="modal" data-target="#edit<?= $id_user; ?>"><i class="fa fa-pen"></i> Edit </button>
                             </div>
 
 
@@ -323,8 +336,8 @@ if (isset($_POST['update'])) {
                             </div>
 
                         <?php
-                        } ?>
-                    </div>
+                    } ?>
+                        </div>
 
                 </div>
                 <!-- /.container-fluid -->

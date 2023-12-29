@@ -1,6 +1,6 @@
 <?php
 session_start();
-//jika belum login tapi akses harus login
+
 if ($_SESSION['level'] == "") {
     header('location:../index.php');
 }
@@ -11,7 +11,6 @@ $page = "pengabdianq";
 <?php
 include '../config.php';
 
-//edit pengabdian
 if (isset($_POST['update'])) {
     $idp = $_POST['id_pengabdian'];
     $ids = $_POST['id_user'];
@@ -34,9 +33,7 @@ if (isset($_POST['update'])) {
     $file = $_FILES['upload']['name'];
     if (empty($file)) {
         $koneksi->query("UPDATE pengabdian SET id_user='$ids', kategori='$kat', judul='$jdl', afiliasi='$afiliasi', tahun_usulan='$ta_usulan', tahun_kegiatan='$thn_keg', tahun_pelaksanaan='$thn_pelak', lama_kegiatan='$lam_kegi', dana_dikti='$da_dikti', in_kind='$inkind', no_sk_penugasan='$nosk', tanggal_penugasan='$tgl_tugas', dana_institusi_lain='$dil', dana_pt='$dpt', mitra='$mit', kategori_mtr='$kamit' WHERE id_pengabdian=$idp ");
-        echo " <div class='alert alert-success'>
-                <strong>Success!</strong>
-                </div><meta http-equiv='refresh' content='1; url= pengabdian.php'/>  ";
+        header('location: pengabdian.php?pesan=succes');
     } else {
         $hapus = $koneksi->query("SELECT * FROM pengabdian WHERE id_pengabdian=$idp");
         $nama_dokumen = mysqli_fetch_array($hapus);
@@ -45,12 +42,10 @@ if (isset($_POST['update'])) {
         unlink($hapus_dokumnen);
         move_uploaded_file($_FILES['upload']['tmp_name'], "../dokumen/" . $file);
         $koneksi->query("UPDATE pengabdian SET id_user='$ids', kategori='$kat', judul='$jdl', afiliasi='$afiliasi', tahun_usulan='$ta_usulan', tahun_kegiatan='$thn_keg', tahun_pelaksanaan='$thn_pelak', lama_kegiatan='$lam_kegi', dana_dikti='$da_dikti', in_kind='$inkind', no_sk_penugasan='$nosk', tanggal_penugasan='$tgl_tugas',dana_institusi_lain='$dil', dana_pt='$dpt', mitra='$mit', kategori_mtr='$kamit', upload='$file' WHERE id_pengabdian=$idp ");
-        echo "<div class='alert alert-success'>
-                <strong>Success!</strong>
-                </div><meta http-equiv='refresh' content='1; url= pengabdian.php'/>  ";
+        header('location: pengabdian.php?pesan=succes');
     }
 };
-//delete
+
 if (isset($_POST['hapus'])) {
     $idp = $_POST['id_pengabdian'];
 
@@ -63,18 +58,12 @@ if (isset($_POST['hapus'])) {
     $delete = mysqli_query($koneksi, "DELETE FROM pengabdian WHERE id_pengabdian='$idp' ");
     //cek apakah berhasil
     if ($delete) {
-        echo " <div class='alert alert-success'>
-            <strong>Success!</strong>
-          </div>
-        <meta http-equiv='refresh' content='1; url= pengabdian.php'/>  ";
+        header('location: pengabdian.php?pesan=succesd');
     } else {
-        echo "<div class='alert alert-warning'>
-            <strong>Failed!</strong>
-          </div>
-         <meta http-equiv='refresh' content='1; url= pengabdian.php'/> ";
+        header('location: pengabdian.php?pesan=failedd');
     }
 };
-//input
+
 if (isset($_POST['simpan'])) {
     $ids = $_POST['id_user'];
     $kat = $_POST['kategori'];
@@ -95,24 +84,17 @@ if (isset($_POST['simpan'])) {
 
     if (isset($_FILES['upload']['name'])) {
         $file_name = $_FILES['upload']['name'];
-        $file_tmp = $_FILES['upload']['tmp_name'];
-        move_uploaded_file($file_tmp, "../dokumen/" . $file_name);
-        $query = mysqli_query($koneksi, "INSERT INTO pengabdian VALUES(NULL,'$ids','$kat','$jdl','$afiliasi','$ta_usulan','$thn_keg','$thn_pelak','$lam_kegi','$da_dikti','$inkind','$nosk','$tgl_tugas','$dil','$dpt','$mit','$kamit','$file_name')");
-        if ($query) {
-            echo " <div class='alert alert-success'>
-            <strong>Success!</strong>
-          </div>
-        <meta http-equiv='refresh' content='1; url= pengabdian.php'/>  ";
+        if (empty($file_name)) {
+            $koneksi->query("INSERT INTO pengabdian(id_pengabdian,id_user,kategori,judul,afiliasi,tahun_usulan,tahun_kegiatan,tahun_pelaksanaan,lama_kegiatan,dana_dikti,in_kind,no_sk_penugasan,tanggal_penugasan,dana_institusi_lain,dana_pt,mitra,kategori_mtr) VALUES(NULL,'$ids','$kat','$jdl','$afiliasi','$ta_usulan','$thn_keg','$thn_pelak','$lam_kegi','$da_dikti','$inkind','$nosk','$tgl_tugas','$dil','$dpt','$mit','$kamit')");
+            header('location: pengabdian.php?pesan=success');
         } else {
-            echo "<div class='alert alert-warning'>
-            <strong>Failed!</strong>
-          </div>
-         <meta http-equiv='refresh' content='1; url= pengabdian.php'/> ";
+            $file_tmp = $_FILES['upload']['tmp_name'];
+            move_uploaded_file($file_tmp, "../dokumen/" . $file_name);
+            $koneksi->query("INSERT INTO pengabdian(id_pengabdian,id_user,kategori,judul,afiliasi,tahun_usulan,tahun_kegiatan,tahun_pelaksanaan,lama_kegiatan,dana_dikti,in_kind,no_sk_penugasan,tanggal_penugasan,dana_institusi_lain,dana_pt,mitra,kategori_mtr,upload) VALUES(NULL,'$ids','$kat','$jdl','$afiliasi','$ta_usulan','$thn_keg','$thn_pelak','$lam_kegi','$da_dikti','$inkind','$nosk','$tgl_tugas','$dil','$dpt','$mit','$kamit','$file_name')");
+            header('location: pengabdian.php?pesan=success');
         }
     } else {
-        echo "<div class='alert alert-warning'>
-            <strong>MAAF GAGAL</strong>
-          </div>";
+        header('location: pengabdian.php?pesan=warning');
     }
 };
 
@@ -129,8 +111,7 @@ if (isset($_POST['simpan'])) {
     <?php include('../layout/header.php'); ?>
     <style>
         /* menu actv */
-        li.active,
-        a.nav-link:hover {
+        li.active {
             background-color: #464646;
         }
     </style>
@@ -167,6 +148,35 @@ if (isset($_POST['simpan'])) {
                     <div class="row">
 
                     </div>
+
+                    <?php
+                    if (isset($_GET['pesan'])) {
+                        if ($_GET['pesan'] == "success") {
+                            echo " <div class='alert alert-success'>
+                                    <strong>Berhasil simpan data</strong>
+                                    </div>
+                                    <meta http-equiv='refresh' content='1; url= pengabdian.php'/>  ";
+                        } elseif ($_GET['pesan'] == "succes") {
+                            echo " <div class='alert alert-success'>
+                                    <strong>Berhasil ubah data</strong>
+                                     </div><meta http-equiv='refresh' content='1; url= pengabdian.php'/>  ";
+                        } elseif ($_GET['pesan'] == "succesd") {
+                            echo " <div class='alert alert-success'>
+                                    <strong>Berhasil hapus data</strong>
+                                    </div>
+                                     <meta http-equiv='refresh' content='1; url= pengabdian.php'/>  ";
+                        } elseif ($_GET['pesan'] == "warning") {
+                            echo "<div class='alert alert-warning'>
+                                    <strong>Gagal simpan data</strong>
+                                    </div> <meta http-equiv='refresh' content='1; url= pengabdian.php'/>";
+                        } else {
+                            echo "<div class='alert alert-warning'>
+                                    <strong>Gagal hapus data</strong>
+                                     </div>
+                                 <meta http-equiv='refresh' content='1; url= pengabdian.php'/> ";
+                        }
+                    }
+                    ?>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -490,7 +500,7 @@ if (isset($_POST['simpan'])) {
                                 <div class="input-group-append">
                                     <span class="input-group-text">Rp</span>
                                 </div>
-                                <input type="text" name="dana_dikti" class="form-control" placeholder="Masukkan dana dikti" required>
+                                <input type="text" name="dana_dikti" class="form-control" placeholder="Contoh: 1000000" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -499,7 +509,7 @@ if (isset($_POST['simpan'])) {
                                 <div class="input-group-append">
                                     <span class="input-group-text">Rp</span>
                                 </div>
-                                <input type="text" name="in_kind" class="form-control" placeholder="Masukkan in kind" required>
+                                <input type="text" name="in_kind" class="form-control" placeholder="Contoh: 500000" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -516,7 +526,7 @@ if (isset($_POST['simpan'])) {
                                 <div class="input-group-append">
                                     <span class="input-group-text">Rp</span>
                                 </div>
-                                <input type="text" name="dana_institusi_lain" class="form-control" placeholder="Masukkan dana institusi lain" required>
+                                <input type="text" name="dana_institusi_lain" class="form-control" placeholder="Contoh: 10000000" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -525,7 +535,7 @@ if (isset($_POST['simpan'])) {
                                 <div class="input-group-append">
                                     <span class="input-group-text">Rp</span>
                                 </div>
-                                <input type="text" name="dana_pt" class="form-control" placeholder="Masukkan dana pt" required>
+                                <input type="text" name="dana_pt" class="form-control" placeholder="Contoh: 900000" required>
                             </div>
                         </div>
                         <div class="form-group">

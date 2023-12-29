@@ -15,8 +15,8 @@
     <!-- Nav Item - Dashboard -->
     <li class="nav-item <?php if ($page == "homeq") echo "active"; ?>">
         <a class="nav-link" href="index.php">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <i class="fas fa-fw fa-home"></i>
+            <span>Beranda</span></a>
     </li>
 
 
@@ -31,7 +31,7 @@
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item <?php if ($page == "penelitianq") echo "active"; ?>">
         <a class="nav-link collapsed" href="penelitian.php" aria-expanded="true" aria-controls="collapsePages">
-            <i class="fas fa-fw fa-hands-helping"></i>
+            <i class="fas fa-fw fa-pencil-alt"></i>
             <span>Penelitian</span>
         </a>
     </li>
